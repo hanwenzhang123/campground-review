@@ -58,11 +58,12 @@ app.use(passport.session());        //after
 passport.use(new LocalStrategy(User.authenticate()));   //authenticate() from the package that is used in Passport's LocalStrategy from require('passport-local')
 
 passport.serializeUser(User.serializeUser());     //how to store data in the session
-passport.deserializeUser(User.deserializeUser());   //how to get user out of the session
+passport.deserializeUser(User.deserializeUser());   //how to get/retrieve user out of the session
 
-app.use((req, res, next) => {       //middleware for flash
-    res.locals.success = req.flash('success');
-    res.locals.error = req.flash('error');
+app.use((req, res, next) => {       //global
+    res.locals.currentUser = req.user;     //all the page we can access to if there is a currentUser (req.user) by passport that is stored in the session
+    res.locals.success = req.flash('success');  //middleware for flash
+    res.locals.error = req.flash('error');  //middleware for flash
     next();     //need next() for middleware
 })
 
